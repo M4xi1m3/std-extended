@@ -11,10 +11,11 @@ sock_address::~sock_address() {
     // TODO Auto-generated destructor stub
 }
 
-std::string net::sock_address::getAddress() const {
+std::string sock_address::getAddress() const {
     return m_address;
 }
 
-uint16_t net::sock_address::getPort() const {
+uint16_t sock_address::getPort() const {
     return m_port;
 }
+
