@@ -4,6 +4,7 @@
 #include <string>
 #include <netdb.h>
 
+#include "sockaddress.h"
 #include "sock.h"
 
 namespace net {
@@ -18,9 +19,8 @@ namespace net {
          * After this, the socket is not bound and isn't listening
          *
          * @param address
-         * @param port
          */
-        server_sock(const std::string& address, const std::string& port);
+        server_sock(const sock_address& address);
         virtual ~server_sock();
 
         /**
@@ -40,6 +40,11 @@ namespace net {
         sock accept();
 
         /**
+         * Closes the socket
+         */
+        void close();
+
+        /**
          * Enable/disable the SO_REUSEADDR socket option
          * @param value Value for SO_REUSEADDR
          */
@@ -50,6 +55,12 @@ namespace net {
          * @return  The value of SO_REUSEADDR
          */
         bool getReuseAddress();
+
+        /**
+         * Get address of the socket
+         * @return  Address of the socket
+         */
+        sock_address getAddress();
 
     private:
         int m_sockfd;

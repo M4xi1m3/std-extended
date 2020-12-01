@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "sockaddress.h"
+
 namespace streams {
     class sock_streambuf;
 }
@@ -24,9 +26,8 @@ namespace net {
          * After this, the socket is ready and connected. If the socket couldn't be created or failed to connect, an exception is raised.
          *
          * @param address   Address to connect to
-         * @param port      Port to connect to
          */
-        sock(const std::string& address, const std::string& port);
+        sock(const sock_address& address);
 
         /**
          * Close the socket
@@ -68,6 +69,18 @@ namespace net {
          * @return  The value of TCP_NODELAY
          */
         bool getTcpNoDelay();
+
+        /**
+         * Get address of the peer we're connected to.
+         * @return  Address of the peer
+         */
+        sock_address getPeerAddress();
+
+        /**
+         * Get address of the socket
+         * @return  Address of the socket
+         */
+        sock_address getSockAddress();
 
         virtual ~sock();
     private:

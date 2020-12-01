@@ -13,7 +13,7 @@
 
 using namespace net;
 
-sock::sock(const std::string& address, const std::string& port) {
+sock::sock(const sock_address& address) {
 
     m_sockfd = -1;
 
@@ -24,8 +24,11 @@ sock::sock(const std::string& address, const std::string& port) {
     hints.ai_family = AF_UNSPEC;     // IPv4 or IPv6
     hints.ai_socktype = SOCK_STREAM; // TCP
 
+    char buf[10];
+    snprintf(buf, 10, "%u", address.getPort());
+
     int status;
-    if ((status = getaddrinfo(address.c_str(), port.c_str(), &hints, &addrinfo)) != 0) {
+    if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &addrinfo)) != 0) {
         freeaddrinfo(addrinfo);
         throw std::system_error(status, std::system_category(), gai_strerror(status));
     }
@@ -44,13 +47,15 @@ sock::sock(const std::string& address, const std::string& port) {
     freeaddrinfo(addrinfo);
 }
 
-void __close(int fd) {
+static void __close(int fd) {
     close(fd);
 }
 
 void sock::close() {
-    if (m_sockfd != -1)
+    if (m_sockfd != -1) {
         __close(m_sockfd);
+        m_sockfd = -1;
+    }
 }
 
 sock::sock(int sockfd) : m_sockfd(sockfd) {
@@ -93,6 +98,42 @@ bool sock::getTcpNoDelay() {
     }
 
     return out == 0 ? false : true;
+}
+
+static void* get_in_addr(struct sockaddr* sa) {
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*) sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*) sa)->sin6_addr);
+}
+
+sock_address sock::getPeerAddress() {
+    struct sockaddr_in6 addr;
+
+    socklen_t len;
+
+    char address[INET6_ADDRSTRLEN];
+    len = sizeof(addr);
+    getpeername(m_sockfd, (struct sockaddr*) &addr, &len);
+
+    inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
+
+    return sock_address(std::string(address), ntohs(addr.sin6_port));
+}
+
+sock_address sock::getSockAddress() {
+    struct sockaddr_in6 addr;
+
+    socklen_t len;
+
+    char address[INET6_ADDRSTRLEN];
+    len = sizeof(addr);
+    getsockname(m_sockfd, (struct sockaddr*) &addr, &len);
+
+    inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
+
+    return sock_address(std::string(address), ntohs(addr.sin6_port));
 }
 
 sock::~sock() {
