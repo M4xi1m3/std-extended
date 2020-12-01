@@ -24,7 +24,8 @@ int main() {
     client_out.flush();
     client.close();
 */
-    net::sock s(net::sock_address("::1", 12345, net::sock_address::inet6));
+    std::cout << net::sock_address("localhost", "http") << std::endl;
+    net::sock s(net::sock_address("127.0.0.1", "12345"));
     s.connect();
 
     streams::sock_ostream out(s);
