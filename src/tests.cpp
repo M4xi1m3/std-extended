@@ -3,24 +3,35 @@
 #include "net/sockaddress.h"
 #include "streams/sock.h"
 
-int main() {
+#include <iostream>
 
-    net::server_sock s(net::sock_address("::1", 12345));
+int main() {
+/*
+    net::server_sock s(net::sock_address("::1", 12345, net::sock_address::inet6));
     s.setReuseAddress(true);
     s.bind();
     s.listen();
 
-    while(1) {
-        net::sock client = s.accept();
-        net::sock_address client_addr = client.getPeerAddress();
+    std::cout << "Server listening on " << s.getAddress() << std::endl;
 
-        streams::sock_ostream client_out(client);
+    net::sock client = s.accept();
+    net::sock_address client_addr = client.getPeerAddress();
 
-        client_out << "Hello " << client_addr.getAddress() << ":" << client_addr.getPort() << "\n";
+    streams::sock_ostream client_out(client);
 
-        client_out.flush();
-        client.close();
-    }
+    client_out << "Hello " << client_addr;
+
+    client_out.flush();
+    client.close();
+*/
+    net::sock s(net::sock_address("::1", 12345, net::sock_address::inet6));
+    s.connect();
+
+    streams::sock_ostream out(s);
+    out << "Hello world!\n";
+    out.flush();
+    s.close();
+
 
     return 0;
 }

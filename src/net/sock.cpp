@@ -16,35 +16,50 @@ using namespace net;
 sock::sock(const sock_address& address) {
 
     m_sockfd = -1;
+    m_addrinfo = nullptr;
 
     struct addrinfo hints;
-    struct addrinfo *addrinfo;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;     // IPv4 or IPv6
+    hints.ai_family = address.getFamilly() == sock_address::inet6 ? AF_INET6 : AF_INET;
     hints.ai_socktype = SOCK_STREAM; // TCP
 
     char buf[10];
     snprintf(buf, 10, "%u", address.getPort());
 
     int status;
-    if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &addrinfo)) != 0) {
-        freeaddrinfo(addrinfo);
+    if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &m_addrinfo)) != 0) {
+        freeaddrinfo(m_addrinfo);
+        m_addrinfo = nullptr;
         throw std::system_error(status, std::system_category(), gai_strerror(status));
     }
 
-    m_sockfd = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
+    m_sockfd = socket(m_addrinfo->ai_family, m_addrinfo->ai_socktype, m_addrinfo->ai_protocol);
     if (m_sockfd == -1) {
-        freeaddrinfo(addrinfo);
+        freeaddrinfo(m_addrinfo);
+        m_addrinfo = nullptr;
+        throw std::system_error(errno, std::system_category(), strerror(errno));
+    }
+}
+
+static void __connect(int sockfd, struct addrinfo** addrinfo) {
+
+    if (*addrinfo == nullptr) {
+        throw std::runtime_error("Socket's addrinfo already freed!");
+    }
+
+    if (connect(sockfd, (*addrinfo)->ai_addr, (*addrinfo)->ai_family == AF_INET6 ? sizeof(sockaddr_in6) : sizeof(sockaddr_in)) != 0) {
+        freeaddrinfo(*addrinfo);
+        *addrinfo = nullptr;
         throw std::system_error(errno, std::system_category(), strerror(errno));
     }
 
-    if (connect(m_sockfd, addrinfo->ai_addr, sizeof(*addrinfo->ai_addr)) != 0) {
-        freeaddrinfo(addrinfo);
-        throw std::system_error(errno, std::system_category(), strerror(errno));
-    }
+    freeaddrinfo(*addrinfo);
+    *addrinfo = nullptr;
+}
 
-    freeaddrinfo(addrinfo);
+void sock::connect() {
+    __connect(m_sockfd, &m_addrinfo);
 }
 
 static void __close(int fd) {
@@ -56,9 +71,14 @@ void sock::close() {
         __close(m_sockfd);
         m_sockfd = -1;
     }
+
+    if (m_addrinfo != nullptr) {
+        freeaddrinfo(m_addrinfo);
+        m_addrinfo = nullptr;
+    }
 }
 
-sock::sock(int sockfd) : m_sockfd(sockfd) {
+sock::sock(int sockfd) : m_sockfd(sockfd), m_addrinfo(nullptr) {
 
 }
 
@@ -119,7 +139,7 @@ sock_address sock::getPeerAddress() {
 
     inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port));
+    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::inet6 : sock_address::inet4);
 }
 
 sock_address sock::getSockAddress() {
@@ -133,7 +153,7 @@ sock_address sock::getSockAddress() {
 
     inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port));
+    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::inet6 : sock_address::inet4);
 }
 
 sock::~sock() {

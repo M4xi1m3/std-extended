@@ -18,7 +18,7 @@ server_sock::server_sock(const sock_address& address) {
     m_addrinfo = nullptr;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;     // IPv4 or IPv6
+    hints.ai_family = address.getFamilly() == sock_address::inet6 ? AF_INET6 : AF_INET;
     hints.ai_socktype = SOCK_STREAM; // TCP
     hints.ai_flags = AI_PASSIVE;     // Local address
 
@@ -113,6 +113,11 @@ void server_sock::close() {
         __close(m_sockfd);
         m_sockfd = -1;
     }
+
+    if (m_addrinfo != nullptr) {
+        freeaddrinfo(m_addrinfo);
+        m_addrinfo = nullptr;
+    }
 }
 
 static void* get_in_addr(struct sockaddr* sa) {
@@ -134,7 +139,7 @@ sock_address server_sock::getAddress() {
 
     inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port));
+    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::inet6 : sock_address::inet4);
 }
 
 server_sock::~server_sock() {

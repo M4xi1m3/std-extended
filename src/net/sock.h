@@ -2,6 +2,7 @@
 #define NET_SOCK_H_
 
 #include <string>
+#include <netdb.h>
 
 #include "sockaddress.h"
 
@@ -22,8 +23,8 @@ namespace net {
 
     public:
         /**
-         * Create a socket from address and port, forcing it into SOCK_STREAM, using either IPv4 or IPv6, and calls connect.
-         * After this, the socket is ready and connected. If the socket couldn't be created or failed to connect, an exception is raised.
+         * Create a socket from address and port, forcing it into SOCK_STREAM.
+         * After this, the socket is ready to connect. If the socket couldn't be created, an exception is raised.
          *
          * @param address   Address to connect to
          */
@@ -33,6 +34,11 @@ namespace net {
          * Close the socket
          */
         void close();
+
+        /**
+         * Connects the socket.
+         */
+        void connect();
 
         /**
          * Enable/disable the SO_KEEPALIVE socket option
@@ -86,6 +92,7 @@ namespace net {
     private:
         sock(int sockfd);
         int m_sockfd;
+        struct addrinfo *m_addrinfo;
     };
 
 } /* namespace net */
