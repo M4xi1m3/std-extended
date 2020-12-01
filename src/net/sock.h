@@ -27,7 +27,48 @@ namespace net {
          * @param port      Port to connect to
          */
         sock(const std::string& address, const std::string& port);
+
+        /**
+         * Close the socket
+         */
         void close();
+
+        /**
+         * Enable/disable the SO_KEEPALIVE socket option
+         * @param value Value for SO_KEEPALIVE
+         */
+        void setKeepAlive(bool value);
+
+        /**
+         * Get value of the SO_KEEPALIVE socket option
+         * @return  The value of SO_KEEPALIVE
+         */
+        bool getKeepAlive();
+
+        /**
+         * Enable/disable the SO_REUSEADDR socket option
+         * @param value Value for SO_REUSEADDR
+         */
+        void setReuseAddress(bool value);
+
+        /**
+         * Get value of the SO_REUSEADDR socket option
+         * @return  The value of SO_REUSEADDR
+         */
+        bool getReuseAddress();
+
+        /**
+         * Enable/disable the TCP_NODELAY socket option
+         * @param value Value for TCP_NODELAY
+         */
+        void setTcpNoDelay(bool value);
+
+        /**
+         * Get value of the TCP_NODELAY socket option
+         * @return  The value of TCP_NODELAY
+         */
+        bool getTcpNoDelay();
+
         virtual ~sock();
     private:
         sock(int sockfd);

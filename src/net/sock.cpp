@@ -4,6 +4,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <unistd.h>
 
 #include <cstring>
@@ -53,6 +55,44 @@ void sock::close() {
 
 sock::sock(int sockfd) : m_sockfd(sockfd) {
 
+}
+
+void sock::setKeepAlive(bool value) {
+    int val = value ? 1 : 0;
+
+    if (setsockopt(m_sockfd, SOL_SOCKET, SO_KEEPALIVE, &val, sizeof(val)) != 0) {
+        throw std::system_error(errno, std::system_category(), strerror(errno));
+    }
+}
+
+bool sock::getKeepAlive() {
+    int out = 0;
+    socklen_t len = sizeof(out);
+
+    if (getsockopt(m_sockfd, SOL_SOCKET, SO_KEEPALIVE, &out, &len) != 0) {
+        throw std::system_error(errno, std::system_category(), strerror(errno));
+    }
+
+    return out == 0 ? false : true;
+}
+
+void sock::setTcpNoDelay(bool value) {
+    int val = value ? 1 : 0;
+
+    if (setsockopt(m_sockfd, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val)) != 0) {
+        throw std::system_error(errno, std::system_category(), strerror(errno));
+    }
+}
+
+bool sock::getTcpNoDelay() {
+    int out = 0;
+    socklen_t len = sizeof(out);
+
+    if (getsockopt(m_sockfd, IPPROTO_TCP, TCP_NODELAY, &out, &len) != 0) {
+        throw std::system_error(errno, std::system_category(), strerror(errno));
+    }
+
+    return out == 0 ? false : true;
 }
 
 sock::~sock() {

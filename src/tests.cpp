@@ -5,6 +5,9 @@
 int main() {
 
     net::server_sock s("127.0.0.1", "12345");
+    s.setReuseAddress(true);
+    s.bind();
+    s.listen();
 
     while(1) {
         net::sock client = s.accept();
