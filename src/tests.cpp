@@ -6,8 +6,7 @@
 #include <iostream>
 
 int main() {
-/*
-    net::server_sock s(net::sock_address("::1", 12345, net::sock_address::inet6));
+    net::server_sock s(net::sock_address("0.0.0.0:12345"));
     s.setReuseAddress(true);
     s.bind();
     s.listen();
@@ -19,20 +18,21 @@ int main() {
 
     streams::sock_ostream client_out(client);
 
-    client_out << "Hello " << client_addr;
+    client_out << "Hello " << client_addr << "\n";
 
     client_out.flush();
     client.close();
-*/
-    std::cout << net::sock_address("localhost", "http") << std::endl;
-    net::sock s(net::sock_address("127.0.0.1", "12345"));
+
+/*
+    std::cout << net::sock_address("[::1]:12345") << std::endl;
+    net::sock s(net::sock_address("[::1]:12345"));
     s.connect();
 
     streams::sock_ostream out(s);
     out << "Hello world!\n";
     out.flush();
     s.close();
-
+*/
 
     return 0;
 }

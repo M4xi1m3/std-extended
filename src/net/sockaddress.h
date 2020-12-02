@@ -7,14 +7,28 @@
 
 namespace net {
 
+    /**
+     * Represents a socket address
+     */
     class sock_address {
     public:
         /**
          * Represents an address family, either IPv4 or IPv6
          */
         enum family {
-            inet4, inet6
+            inet4, inet6, undef
         };
+
+        /**
+         * Creates a socket address from a single string, formatted as address:port, or [address]:port for IPv6
+         *
+         * Parsing this string is done in two different steps :
+         *  - Separating the address and port part (finding the last ":" and splitting)
+         *  - Removing the [] arround the IPv6 (if present)
+         *
+         * @param address
+         */
+        sock_address(const std::string& address);
 
         /**
          * Creates a socket address from a domain and a service
@@ -36,25 +50,33 @@ namespace net {
          * Get the IP of the socket address
          * @return  The IP
          */
-        std::string getAddress() const;
+        inline std::string getAddress() const {
+            return m_address;
+        }
 
         /**
          * Get the port of the socket address
          * @return  The port
          */
-        uint16_t getPort() const;
+        inline uint16_t getPort() const {
+            return m_port;
+        }
 
         /**
          * Get the family of the socket address
          * @return  The family
          */
-        family getFamilly() const;
+        inline family getFamilly() const {
+            return m_family;
+        }
 
     private:
+        void doGetaddrInfo(const std::string& address, const std::string& service, family family);
+
         struct sockaddr_in6 m_sockaddr;
         std::string m_address;
         uint16_t m_port;
-        family m_familly;
+        family m_family;
     };
 
 } /* namespace net */

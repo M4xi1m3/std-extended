@@ -29,7 +29,6 @@ sock::sock(const sock_address& address) {
 
     int status;
     if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &m_addrinfo)) != 0) {
-        freeaddrinfo(m_addrinfo);
         m_addrinfo = nullptr;
         throw std::system_error(status, std::system_category(), gai_strerror(status));
     }
