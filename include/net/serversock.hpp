@@ -1,11 +1,11 @@
-#ifndef NET_SERVERSOCK_H_
-#define NET_SERVERSOCK_H_
+#ifndef NET_SERVERSOCK_HPP_
+#define NET_SERVERSOCK_HPP_
 
 #include <string>
 #include <netdb.h>
 
-#include "sockaddress.h"
-#include "sock.h"
+#include "sock.hpp"
+#include "sockaddress.hpp"
 
 namespace net {
 
@@ -69,4 +69,4 @@ namespace net {
 
 } /* namespace net */
 
-#endif /* NET_SERVERSOCK_H_ */
+#endif /* NET_SERVERSOCK_HPP_ */

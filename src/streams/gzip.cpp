@@ -1,8 +1,7 @@
-#include "gzip.h"
-
-#include "exceptions.h"
+#include "streams/gzip.hpp"
 
 #include <assert.h>
+#include "streams/exceptions.hpp"
 
 using namespace streams;
 

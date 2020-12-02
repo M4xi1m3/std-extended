@@ -1,9 +1,8 @@
-#include "net/sock.h"
-#include "net/serversock.h"
-#include "net/sockaddress.h"
-#include "streams/sock.h"
-
 #include <iostream>
+#include "net/serversock.hpp"
+#include "net/sock.hpp"
+#include "net/sockaddress.hpp"
+#include "streams/sock.hpp"
 
 int main() {
     net::server_sock s(net::sock_address("0.0.0.0:12345"));

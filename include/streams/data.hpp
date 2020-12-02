@@ -1,10 +1,10 @@
-#ifndef STREAMS_DATA_H_
-#define STREAMS_DATA_H_
+#ifndef STREAMS_DATA_HPP_
+#define STREAMS_DATA_HPP_
 
 #include <cstring>
 #include <fstream>
 
-#include "endian.h"
+#include "endian.hpp"
 
 namespace streams {
 
@@ -184,4 +184,4 @@ namespace streams {
 
 } /* namespace streams */
 
-#endif /* STREAMS_DATA_H_ */
+#endif /* STREAMS_DATA_HPP_ */

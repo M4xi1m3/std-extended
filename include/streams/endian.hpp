@@ -1,5 +1,5 @@
-#ifndef STREAMS_ENDIAN_H_
-#define STREAMS_ENDIAN_H_
+#ifndef STREAMS_ENDIAN_HPP_
+#define STREAMS_ENDIAN_HPP_
 
 namespace streams {
 
@@ -50,4 +50,4 @@ namespace streams {
 
 } /* namespace streams */
 
-#endif /* STREAMS_ENDIAN_H_ */
+#endif /* STREAMS_ENDIAN_HPP_ */

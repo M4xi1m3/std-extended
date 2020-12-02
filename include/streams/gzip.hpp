@@ -1,12 +1,12 @@
-#ifndef STREAMS_GZIP_H_
-#define STREAMS_GZIP_H_
+#ifndef STREAMS_GZIP_HPP_
+#define STREAMS_GZIP_HPP_
 
 #include <cstring>
 #include <fstream>
 
 #include <zlib.h>
 
-#include "exceptions.h"
+#include "exceptions.hpp"
 
 #define STREAMS_CHUNK_SIZE 1024
 
@@ -80,4 +80,4 @@ namespace streams {
 
 } /* namespace streams */
 
-#endif /* STREAMS_GZIP_H_ */
+#endif /* STREAMS_GZIP_HPP_ */

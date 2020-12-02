@@ -1,10 +1,10 @@
-#ifndef NET_SOCK_H_
-#define NET_SOCK_H_
+#ifndef NET_SOCK_HPP_
+#define NET_SOCK_HPP_
 
 #include <string>
 #include <netdb.h>
 
-#include "sockaddress.h"
+#include "sockaddress.hpp"
 
 namespace streams {
     class sock_streambuf;
@@ -97,4 +97,4 @@ namespace net {
 
 } /* namespace net */
 
-#endif /* NET_SOCK_H_ */
+#endif /* NET_SOCK_HPP_ */

@@ -1,5 +1,5 @@
-#ifndef STREAMS_EXCEPTIONS_H_
-#define STREAMS_EXCEPTIONS_H_
+#ifndef STREAMS_EXCEPTIONS_HPP_
+#define STREAMS_EXCEPTIONS_HPP_
 
 #include <exception>
 
@@ -54,4 +54,4 @@ namespace streams {
 
 }
 
-#endif /* STREAMS_EXCEPTIONS_H_ */
+#endif /* STREAMS_EXCEPTIONS_HPP_ */

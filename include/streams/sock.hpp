@@ -1,10 +1,10 @@
-#ifndef STREAMS_SOCK_H_
-#define STREAMS_SOCK_H_
+#ifndef STREAMS_SOCK_HPP_
+#define STREAMS_SOCK_HPP_
 
 #include <cstring>
 #include <fstream>
 
-#include "../net/sock.h"
+#include "../net/sock.hpp"
 
 #define STREAMS_SOCK_BUFFER_SIZE 1024
 
@@ -69,4 +69,4 @@ namespace streams {
 
 } /* namespace streams */
 
-#endif /* STREAMS_SOCK_H_ */
+#endif /* STREAMS_SOCK_HPP_ */

@@ -1,4 +1,4 @@
-#include "endian.h"
+#include "streams/endian.hpp"
 
 using namespace streams;
 

@@ -1,7 +1,6 @@
-#include "data.h"
-#include "exceptions.h"
-
 #include <iostream>
+#include "streams/data.hpp"
+#include "streams/exceptions.hpp"
 
 using namespace streams;
 

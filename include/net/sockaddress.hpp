@@ -1,5 +1,5 @@
-#ifndef NET_SOCKADDRESS_H_
-#define NET_SOCKADDRESS_H_
+#ifndef NET_SOCKADDRESS_HPP_
+#define NET_SOCKADDRESS_HPP_
 
 #include <string>
 #include <netinet/in.h>
@@ -92,4 +92,4 @@ namespace net {
  */
 std::ostream& operator<<(std::ostream& stream, const net::sock_address& addr);
 
-#endif /* NET_SOCKADDRESS_H_ */
+#endif /* NET_SOCKADDRESS_HPP_ */
