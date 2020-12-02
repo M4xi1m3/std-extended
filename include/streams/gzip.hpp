@@ -10,7 +10,7 @@
 
 #define STREAMS_CHUNK_SIZE 1024
 
-namespace streams {
+namespace stde::streams {
 
     /**
      * gzip streambuf

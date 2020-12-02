@@ -3,7 +3,7 @@
 
 #include <exception>
 
-namespace streams {
+namespace stde::streams {
 
     /**
      * Stream-related exception

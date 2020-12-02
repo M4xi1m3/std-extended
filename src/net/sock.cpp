@@ -11,7 +11,7 @@
 #include <cstring>
 #include <system_error>
 
-using namespace net;
+using namespace stde::net;
 
 sock::sock(const sock_address& address) {
 

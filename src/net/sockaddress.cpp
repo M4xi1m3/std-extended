@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
-using namespace net;
+using namespace stde::net;
 
 static void* get_in_addr(struct sockaddr* sa) {
     if (sa->sa_family == AF_INET) {
@@ -111,7 +111,7 @@ sock_address::~sock_address() {
     // TODO Auto-generated destructor stub
 }
 
-std::ostream& operator<<(std::ostream& stream, const net::sock_address& addr) {
+std::ostream& operator<<(std::ostream& stream, const stde::net::sock_address& addr) {
     if (addr.getFamilly() == sock_address::inet6) {
         return stream << "[" << addr.getAddress() << "]:" << addr.getPort();
     } else {

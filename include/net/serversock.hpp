@@ -7,7 +7,7 @@
 #include "sock.hpp"
 #include "sockaddress.hpp"
 
-namespace net {
+namespace stde::net {
 
     /**
      * Represents a TCP server socket

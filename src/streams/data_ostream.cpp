@@ -2,7 +2,7 @@
 #include "streams/data.hpp"
 #include "streams/exceptions.hpp"
 
-using namespace streams;
+using namespace stde::streams;
 
 data_ostream::data_ostream(std::ostream& stream, endianconv::endian endianness) : std::ostream(stream.rdbuf()), m_endianness(endianness) {
 }

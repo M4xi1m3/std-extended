@@ -1,7 +1,7 @@
 #ifndef STREAMS_ENDIAN_HPP_
 #define STREAMS_ENDIAN_HPP_
 
-namespace streams {
+namespace stde::streams {
 
     /**
      * Does conversions between different endianness

@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include <ostream>
 
-namespace net {
+namespace stde::net {
 
     /**
      * Represents a socket address
@@ -90,6 +90,6 @@ namespace net {
  * @param addr      Socket address to print
  * @return          stream
  */
-std::ostream& operator<<(std::ostream& stream, const net::sock_address& addr);
+std::ostream& operator<<(std::ostream& stream, const stde::net::sock_address& addr);
 
 #endif /* NET_SOCKADDRESS_HPP_ */

@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-using namespace streams;
+using namespace stde::streams;
 
 sock_streambuf::sock_streambuf(const net::sock& socket) : m_socket(socket) {
     m_inBuffer = new char[STREAMS_SOCK_BUFFER_SIZE];

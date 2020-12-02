@@ -6,11 +6,11 @@
 
 #include "sockaddress.hpp"
 
-namespace streams {
+namespace stde::streams {
     class sock_streambuf;
 }
 
-namespace net {
+namespace stde::net {
 
     class server_sock;
 

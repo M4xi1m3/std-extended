@@ -6,7 +6,7 @@
 
 #include "endian.hpp"
 
-namespace streams {
+namespace stde::streams {
 
     /**
      * Stream used to deserialize data

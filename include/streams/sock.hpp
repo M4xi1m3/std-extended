@@ -8,7 +8,7 @@
 
 #define STREAMS_SOCK_BUFFER_SIZE 1024
 
-namespace streams {
+namespace stde::streams {
 
     /**
      * Socket streambuf

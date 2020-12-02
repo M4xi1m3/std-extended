@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "streams/exceptions.hpp"
 
-using namespace streams;
+using namespace stde::streams;
 
 gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
     m_decInBuffer = new char[STREAMS_CHUNK_SIZE];

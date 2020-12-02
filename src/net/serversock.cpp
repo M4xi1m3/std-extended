@@ -9,7 +9,7 @@
 #include <cstring>
 #include <system_error>
 
-using namespace net;
+using namespace stde::net;
 
 server_sock::server_sock(const sock_address& address) {
     m_sockfd = -1;
