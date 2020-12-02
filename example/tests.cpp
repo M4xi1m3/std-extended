@@ -4,34 +4,46 @@
 #include "net/sockaddress.hpp"
 #include "streams/sock.hpp"
 
+#include <fstream>
+#include "conf/properties.hpp"
+
+using namespace stde;
+
 int main() {
-    net::server_sock s(net::sock_address("0.0.0.0:12345"));
-    s.setReuseAddress(true);
-    s.bind();
-    s.listen();
+    std::ifstream f("tmp.properties");
+    conf::properties p;
+    p.load(f);
+    p.save(std::cout);
 
-    std::cout << "Server listening on " << s.getAddress() << std::endl;
+    /*
+     net::server_sock s(net::sock_address("0.0.0.0:12345"));
+     s.setReuseAddress(true);
+     s.bind();
+     s.listen();
 
-    net::sock client = s.accept();
-    net::sock_address client_addr = client.getPeerAddress();
+     std::cout << "Server listening on " << s.getAddress() << std::endl;
 
-    streams::sock_ostream client_out(client);
+     net::sock client = s.accept();
+     net::sock_address client_addr = client.getPeerAddress();
 
-    client_out << "Hello " << client_addr << "\n";
+     streams::sock_ostream client_out(client);
 
-    client_out.flush();
-    client.close();
+     client_out << "Hello " << client_addr << "\n";
 
-/*
-    std::cout << net::sock_address("[::1]:12345") << std::endl;
-    net::sock s(net::sock_address("[::1]:12345"));
-    s.connect();
+     client_out.flush();
+     client.close();
+     */
 
-    streams::sock_ostream out(s);
-    out << "Hello world!\n";
-    out.flush();
-    s.close();
-*/
+    /*
+     std::cout << net::sock_address("[::1]:12345") << std::endl;
+     net::sock s(net::sock_address("[::1]:12345"));
+     s.connect();
+
+     streams::sock_ostream out(s);
+     out << "Hello world!\n";
+     out.flush();
+     s.close();
+     */
 
     return 0;
 }
