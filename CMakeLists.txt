@@ -11,20 +11,20 @@ file(GLOB INCLUDES "src/*.hpp" "src/*/*.hpp")
 include(GNUInstallDirs)
 
 # this is the "object library" target: compiles the sources only once
-add_library(OBJECTS OBJECT ${SOURCES})
+add_library(STDE_OBJECTS OBJECT ${SOURCES})
 
 # shared libraries need PIC
-set_property(TARGET OBJECTS PROPERTY POSITION_INDEPENDENT_CODE 1)
+set_property(TARGET STDE_OBJECTS PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 # Create shared library
 # add_library(stde SHARED ${SOURCES})
 
 # shared and static libraries built from the same object files
-add_library(stde SHARED $<TARGET_OBJECTS:OBJECTS>)
-add_library(stde_static STATIC $<TARGET_OBJECTS:OBJECTS>)
+add_library(stde SHARED $<TARGET_OBJECTS:STDE_OBJECTS>)
+add_library(stde_static STATIC $<TARGET_OBJECTS:STDE_OBJECTS>)
 
 # Set include directory for the library and the examples
-target_include_directories(OBJECTS PUBLIC
+target_include_directories(STDE_OBJECTS PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
@@ -49,12 +49,12 @@ install(EXPORT stdeConfig DESTINATION share/stde/cmake)
 export(TARGETS ${PROJECT_NAME} FILE stdeConfig.cmake)
 
 # Add tests executable
-add_executable(tests example/tests.cpp)
+add_executable(stdetests example/tests.cpp)
 
-target_include_directories(tests PUBLIC
+target_include_directories(stdetests PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE example)
 
-target_link_libraries(tests stde_static)
+target_link_libraries(stdetests stde_static)
 
