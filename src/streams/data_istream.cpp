@@ -115,7 +115,7 @@ std::string data_istream::readUTF() {
 
     char *buff = new char[length];
 
-    read((char*) &out, length);
+    read((char*) buff, length);
 
     if (eof())
         throw eof_exception("Trying to read after EOF.");
