@@ -1,11 +1,12 @@
 #include <iostream>
-#include "net/serversock.hpp"
-#include "net/sock.hpp"
-#include "net/sockaddress.hpp"
-#include "streams/sock.hpp"
-
 #include <fstream>
-#include "conf/properties.hpp"
+
+#include "stde/net/serversock.hpp"
+#include "stde/net/sock.hpp"
+#include "stde/net/sockaddress.hpp"
+#include "stde/streams/sock.hpp"
+#include "stde/conf/properties.hpp"
+
 
 using namespace stde;
 

@@ -25,8 +25,8 @@ add_library(stde_static STATIC $<TARGET_OBJECTS:STDE_OBJECTS>)
 
 # Set include directory for the library and the examples
 target_include_directories(STDE_OBJECTS PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/stde>
+    $<INSTALL_INTERFACE:include/stde>
     PRIVATE src)
 
 
@@ -42,7 +42,7 @@ install(TARGETS ${PROJECT_NAME} EXPORT stdeConfig
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Add install for includes
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(DIRECTORY include/stde/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 
 # Add install for config
 install(EXPORT stdeConfig DESTINATION share/stde/cmake)
