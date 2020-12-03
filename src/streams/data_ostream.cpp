@@ -4,7 +4,7 @@
 
 using namespace stde::streams;
 
-data_ostream::data_ostream(std::ostream& stream, endianconv::endian endianness) : std::ostream(stream.rdbuf()), m_endianness(endianness) {
+data_ostream::data_ostream(const std::ostream& stream, endianconv::endian endianness) : std::ostream(stream.rdbuf()), m_endianness(endianness) {
 }
 
 void data_ostream::writeBoolean(bool value) {

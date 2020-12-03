@@ -18,7 +18,7 @@ namespace stde::streams {
          * @param stream        Stream to read from
          * @param endianness    Endianness if the input
          */
-        data_istream(std::istream& stream, endianconv::endian endianness);
+        data_istream(const std::istream& stream, endianconv::endian endianness);
 
         /**
          * Reads a boolean from the stream
@@ -105,7 +105,7 @@ namespace stde::streams {
          * @param stream        Stream to write to
          * @param endianness    Endianness of the output
          */
-        data_ostream(std::ostream& stream, endianconv::endian endianness);
+        data_ostream(const std::ostream& stream, endianconv::endian endianness);
 
         /**
          * Writes a boolean

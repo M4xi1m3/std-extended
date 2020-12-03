@@ -4,7 +4,7 @@
 
 using namespace stde::streams;
 
-data_istream::data_istream(std::istream& stream, endianconv::endian endianness) : std::istream(stream.rdbuf()), m_endianness(endianness) {
+data_istream::data_istream(const std::istream& stream, endianconv::endian endianness) : std::istream(stream.rdbuf()), m_endianness(endianness) {
 }
 
 bool data_istream::readBoolean() {
