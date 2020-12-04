@@ -50,7 +50,7 @@ namespace stde::streams {
          *
          * @param stream    Stream to read and inflate from
          */
-        gzip_istream(std::istream& stream) : std::istream(new gzip_streambuf(stream.rdbuf())) {
+        gzip_istream(const std::istream& stream) : std::istream(new gzip_streambuf(stream.rdbuf())) {
         }
 
         virtual ~gzip_istream() {
@@ -70,7 +70,7 @@ namespace stde::streams {
          *
          * @param stream    Stream to write deflated data to
          */
-        gzip_ostream(std::ostream& stream) : std::ostream(new gzip_streambuf(stream.rdbuf())) {
+        gzip_ostream(const std::ostream& stream) : std::ostream(new gzip_streambuf(stream.rdbuf())) {
         }
 
         virtual ~gzip_ostream() {

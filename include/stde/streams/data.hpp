@@ -177,7 +177,7 @@ namespace stde::streams {
          * Writes a string
          * @param value The string to write
          */
-        void writeUTF(std::string value);
+        void writeUTF(const std::string& value);
     private:
         endianconv::endian m_endianness;
     };

@@ -64,7 +64,7 @@ void data_ostream::writeDouble(double value) {
     write((char*) &val, 8);
 }
 
-void data_ostream::writeUTF(std::string value) {
+void data_ostream::writeUTF(const std::string& value) {
     writeShort(value.length());
     write(value.c_str(), value.length());
 }

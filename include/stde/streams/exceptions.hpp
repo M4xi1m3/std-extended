@@ -15,7 +15,7 @@ namespace stde::streams {
          *
          * @param message   Message associated with the exception.
          */
-        stream_exception(std::string message) : std::exception(), m_message(message) {
+        stream_exception(const std::string& message) : std::exception(), m_message(message) {
         }
         virtual const char* what() {
             return m_message.c_str();
@@ -34,7 +34,7 @@ namespace stde::streams {
          *
          * @param message   Message associated with the exception.
          */
-        eof_exception(std::string message) : stream_exception(message) {
+        eof_exception(const std::string& message) : stream_exception(message) {
         }
     };
 
@@ -48,7 +48,7 @@ namespace stde::streams {
          *
          * @param message   Message associated with the exception.
          */
-        gzip_exception(std::string message) : stream_exception(message) {
+        gzip_exception(const std::string& message) : stream_exception(message) {
         }
     };
 
