@@ -13,6 +13,7 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
     m_decompressStream.zalloc = Z_NULL;
     m_decompressStream.zfree = Z_NULL;
     m_decompressStream.opaque = Z_NULL;
+    m_decompressStream.avail_in = 0;
 
     int res;
     if ((res = inflateInit2(&m_decompressStream, 16+MAX_WBITS)) != Z_OK) {
