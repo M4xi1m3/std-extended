@@ -20,7 +20,9 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
         std::string message = "";
         message += "Couldn't initialize inflate stream: ";
         message += res;
-        throw new streams::gzip_exception(message);
+        message += " ";
+        message += m_decompressStream.msg;
+        throw streams::gzip_exception(message);
     }
 
     m_cmpInBuffer = new char[STREAMS_CHUNK_SIZE];
@@ -35,7 +37,9 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
         std::string message = "";
         message += "Couldn't initialize deflate stream: ";
         message += res;
-        throw new streams::gzip_exception(message);
+        message += " ";
+        message += m_compressStream.msg;
+        throw streams::gzip_exception(message);
     }
 }
 
@@ -84,8 +88,11 @@ std::streambuf::int_type gzip_streambuf::underflow() {
             inflateEnd(&m_decompressStream);
             std::string message = "";
             message += "Error while inflating: ";
-            message += ret;
-            throw new streams::gzip_exception(message);
+            message += std::to_string(ret);
+            message += " ";
+            message += m_decompressStream.msg;
+
+            throw streams::gzip_exception(message);
     }
 
     setg(m_decOutBuffer, m_decOutBuffer, m_decOutBuffer + STREAMS_CHUNK_SIZE - m_decompressStream.avail_out);

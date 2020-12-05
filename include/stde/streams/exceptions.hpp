@@ -17,7 +17,7 @@ namespace stde::streams {
          */
         stream_exception(const std::string& message) : std::exception(), m_message(message) {
         }
-        virtual const char* what() {
+        virtual const char* what() const noexcept {
             return m_message.c_str();
         }
     private:
