@@ -5,7 +5,9 @@
 
 using namespace stde::streams;
 
-gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
+#include <iostream>
+
+gzip_streambuf::gzip_streambuf(std::streambuf* buffer, header_types type) : m_buffer(buffer) {
     m_decInBuffer = new char[STREAMS_CHUNK_SIZE];
     m_decOutBuffer = new char[STREAMS_CHUNK_SIZE];
     setg(0, 0, 0);
@@ -16,7 +18,9 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
     m_decompressStream.avail_in = 0;
 
     int res;
-    if ((res = inflateInit2(&m_decompressStream, 16+MAX_WBITS)) != Z_OK) {
+    int windowBits = MAX_WBITS + (type == gzip ? 16 : (type == zlib ? 0 : 32));
+
+    if ((res = inflateInit2(&m_decompressStream, windowBits)) != Z_OK) {
         std::string message = "";
         message += "Couldn't initialize inflate stream: ";
         message += res;
@@ -24,6 +28,9 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
         message += m_decompressStream.msg;
         throw streams::gzip_exception(message);
     }
+
+    m_decompressHeader.done = 0;
+    inflateGetHeader(&m_decompressStream, &m_decompressHeader);
 
     m_cmpInBuffer = new char[STREAMS_CHUNK_SIZE];
     m_cmpOutBuffer = new char[STREAMS_CHUNK_SIZE];
@@ -33,6 +40,7 @@ gzip_streambuf::gzip_streambuf(std::streambuf* buffer) : m_buffer(buffer) {
     m_compressStream.zfree = Z_NULL;
     m_compressStream.opaque = Z_NULL;
 
+    windowBits = MAX_WBITS + (type == zlib ? 0 : 16);
     if ((res = deflateInit2(&m_compressStream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, 16+MAX_WBITS, 8, Z_DEFAULT_STRATEGY)) != Z_OK) {
         std::string message = "";
         message += "Couldn't initialize deflate stream: ";
