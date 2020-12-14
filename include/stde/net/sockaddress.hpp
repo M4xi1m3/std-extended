@@ -15,7 +15,7 @@ namespace stde::net {
         /**
          * Represents an address family, either IPv4 or IPv6
          */
-        enum family {
+        enum ip_family {
             inet4, inet6, undef
         };
 
@@ -43,14 +43,14 @@ namespace stde::net {
          * @param port      Port of the socket address
          * @param family    Family of the created address
          */
-        sock_address(const std::string& address, uint16_t port, family family);
+        sock_address(const std::string& address, uint16_t port, ip_family family);
         virtual ~sock_address();
 
         /**
          * Get the IP of the socket address
          * @return  The IP
          */
-        inline std::string getAddress() const {
+        inline std::string address() const {
             return m_address;
         }
 
@@ -58,7 +58,7 @@ namespace stde::net {
          * Get the port of the socket address
          * @return  The port
          */
-        inline uint16_t getPort() const {
+        inline uint16_t port() const {
             return m_port;
         }
 
@@ -66,17 +66,17 @@ namespace stde::net {
          * Get the family of the socket address
          * @return  The family
          */
-        inline family getFamilly() const {
+        inline ip_family family() const {
             return m_family;
         }
 
     private:
-        void doGetaddrInfo(const std::string& address, const std::string& service, family family);
+        void doGetaddrInfo(const std::string& address, const std::string& service, ip_family family);
 
         struct sockaddr_in6 m_sockaddr;
         std::string m_address;
         uint16_t m_port;
-        family m_family;
+        ip_family m_family;
     };
 
 } /* namespace net */

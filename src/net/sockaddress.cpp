@@ -57,7 +57,7 @@ sock_address::sock_address(const std::string& address) {
     doGetaddrInfo(addr_part, service_part, m_family);
 }
 
-void sock_address::doGetaddrInfo(const std::string& address, const std::string& service, family family) {
+void sock_address::doGetaddrInfo(const std::string& address, const std::string& service, ip_family family) {
 
     struct addrinfo *info = nullptr;
 
@@ -97,7 +97,7 @@ sock_address::sock_address(const std::string& address, const std::string& servic
     doGetaddrInfo(address, service, undef);
 }
 
-sock_address::sock_address(const std::string& address, uint16_t port, family familly) : m_address(std::move(address)), m_port(port), m_family(familly) {
+sock_address::sock_address(const std::string& address, uint16_t port, ip_family familly) : m_address(std::move(address)), m_port(port), m_family(familly) {
     int out = inet_pton(familly == inet6 ? AF_INET6 : AF_INET, address.c_str(), &m_sockaddr);
 
     if (out == 0) {
@@ -112,9 +112,9 @@ sock_address::~sock_address() {
 }
 
 std::ostream& operator<<(std::ostream& stream, const stde::net::sock_address& addr) {
-    if (addr.getFamilly() == sock_address::inet6) {
-        return stream << "[" << addr.getAddress() << "]:" << addr.getPort();
+    if (addr.family() == sock_address::inet6) {
+        return stream << "[" << addr.address() << "]:" << addr.port();
     } else {
-        return stream << addr.getAddress() << ":" << addr.getPort();
+        return stream << addr.address() << ":" << addr.port();
     }
 }

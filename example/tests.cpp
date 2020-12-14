@@ -11,21 +11,23 @@
 using namespace stde;
 
 int main() {
+    /*
     std::ifstream f("tmp.properties");
     conf::properties p;
     p.load(f);
     p.save(std::cout);
+    */
 
-    /*
+
      net::server_sock s(net::sock_address("0.0.0.0:12345"));
-     s.setReuseAddress(true);
+     s.reuse_address(true);
      s.bind();
      s.listen();
 
-     std::cout << "Server listening on " << s.getAddress() << std::endl;
+     std::cout << "Server listening on " << s.address() << std::endl;
 
      net::sock client = s.accept();
-     net::sock_address client_addr = client.getPeerAddress();
+     net::sock_address client_addr = client.peer_address();
 
      streams::sock_ostream client_out(client);
 
@@ -33,7 +35,7 @@ int main() {
 
      client_out.flush();
      client.close();
-     */
+
 
     /*
      std::cout << net::sock_address("[::1]:12345") << std::endl;

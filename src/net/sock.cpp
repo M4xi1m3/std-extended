@@ -21,14 +21,14 @@ sock::sock(const sock_address& address) {
     struct addrinfo hints;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = address.getFamilly() == sock_address::inet6 ? AF_INET6 : AF_INET;
+    hints.ai_family = address.family() == sock_address::inet6 ? AF_INET6 : AF_INET;
     hints.ai_socktype = SOCK_STREAM; // TCP
 
     char buf[10];
-    snprintf(buf, 10, "%u", address.getPort());
+    snprintf(buf, 10, "%u", address.port());
 
     int status;
-    if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &m_addrinfo)) != 0) {
+    if ((status = getaddrinfo(address.address().c_str(), buf, &hints, &m_addrinfo)) != 0) {
         m_addrinfo = nullptr;
         throw std::system_error(status, std::system_category(), gai_strerror(status));
     }
@@ -81,7 +81,7 @@ sock::sock(int sockfd) : m_sockfd(sockfd), m_addrinfo(nullptr) {
 
 }
 
-void sock::setKeepAlive(bool value) {
+void sock::keep_alive(bool value) {
     int val = value ? 1 : 0;
 
     if (setsockopt(m_sockfd, SOL_SOCKET, SO_KEEPALIVE, &val, sizeof(val)) != 0) {
@@ -89,7 +89,7 @@ void sock::setKeepAlive(bool value) {
     }
 }
 
-bool sock::getKeepAlive() {
+bool sock::keep_alive() {
     int out = 0;
     socklen_t len = sizeof(out);
 
@@ -100,7 +100,7 @@ bool sock::getKeepAlive() {
     return out == 0 ? false : true;
 }
 
-void sock::setTcpNoDelay(bool value) {
+void sock::tcp_no_delay(bool value) {
     int val = value ? 1 : 0;
 
     if (setsockopt(m_sockfd, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val)) != 0) {
@@ -108,7 +108,7 @@ void sock::setTcpNoDelay(bool value) {
     }
 }
 
-bool sock::getTcpNoDelay() {
+bool sock::tcp_no_delay() {
     int out = 0;
     socklen_t len = sizeof(out);
 
@@ -127,7 +127,7 @@ static void* get_in_addr(struct sockaddr* sa) {
     return &(((struct sockaddr_in6*) sa)->sin6_addr);
 }
 
-sock_address sock::getPeerAddress() {
+sock_address sock::peer_address() {
     struct sockaddr_in6 addr;
 
     socklen_t len;
@@ -141,7 +141,7 @@ sock_address sock::getPeerAddress() {
     return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::inet6 : sock_address::inet4);
 }
 
-sock_address sock::getSockAddress() {
+sock_address sock::address() {
     struct sockaddr_in6 addr;
 
     socklen_t len;

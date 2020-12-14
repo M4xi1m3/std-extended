@@ -18,15 +18,15 @@ server_sock::server_sock(const sock_address& address) {
     m_addrinfo = nullptr;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = address.getFamilly() == sock_address::inet6 ? AF_INET6 : AF_INET;
+    hints.ai_family = address.family() == sock_address::inet6 ? AF_INET6 : AF_INET;
     hints.ai_socktype = SOCK_STREAM; // TCP
     hints.ai_flags = AI_PASSIVE;     // Local address
 
     char buf[10];
-    snprintf(buf, 10, "%u", address.getPort());
+    snprintf(buf, 10, "%u", address.port());
 
     int status;
-    if ((status = getaddrinfo(address.getAddress().c_str(), buf, &hints, &m_addrinfo)) != 0) {
+    if ((status = getaddrinfo(address.address().c_str(), buf, &hints, &m_addrinfo)) != 0) {
         m_addrinfo = nullptr;
         throw std::system_error(status, std::system_category(), gai_strerror(status));
     }
@@ -84,7 +84,7 @@ sock server_sock::accept() {
     return client;
 }
 
-void server_sock::setReuseAddress(bool value) {
+void server_sock::reuse_address(bool value) {
     int val = value ? 1 : 0;
 
     if (setsockopt(m_sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) != 0) {
@@ -92,7 +92,7 @@ void server_sock::setReuseAddress(bool value) {
     }
 }
 
-bool server_sock::getReuseAddress() {
+bool server_sock::reuse_address() {
     int out = 0;
     socklen_t len = sizeof(out);
 
@@ -127,7 +127,7 @@ static void* get_in_addr(struct sockaddr* sa) {
     return &(((struct sockaddr_in6*) sa)->sin6_addr);
 }
 
-sock_address server_sock::getAddress() {
+sock_address server_sock::address() {
     struct sockaddr_in6 addr;
 
     socklen_t len;

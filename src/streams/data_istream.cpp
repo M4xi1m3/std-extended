@@ -7,7 +7,7 @@ using namespace stde::streams;
 data_istream::data_istream(const std::istream& stream, endianconv::endian endianness) : std::istream(stream.rdbuf()), m_endianness(endianness) {
 }
 
-bool data_istream::readBoolean() {
+bool data_istream::read_bool() {
     uint8_t out = 0;
     read((char*) &out, 1);
 
@@ -16,7 +16,7 @@ bool data_istream::readBoolean() {
     return out != 0;
 }
 
-int8_t data_istream::readByte() {
+int8_t data_istream::read_byte() {
     int8_t out = 0;
     read((char*) &out, 1);
 
@@ -25,7 +25,7 @@ int8_t data_istream::readByte() {
     return out;
 }
 
-uint8_t data_istream::readUnsignedByte() {
+uint8_t data_istream::read_ubyte() {
     uint8_t out = 0;
     read((char*) &out, 1);
 
@@ -34,7 +34,7 @@ uint8_t data_istream::readUnsignedByte() {
     return out;
 }
 
-int16_t data_istream::readShort() {
+int16_t data_istream::read_short() {
     int16_t out = 0;
     read((char*) &out, 2);
 
@@ -43,7 +43,7 @@ int16_t data_istream::readShort() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-uint16_t data_istream::readUnsignedShort() {
+uint16_t data_istream::read_ushort() {
     uint16_t out = 0;
     read((char*) &out, 2);
 
@@ -52,7 +52,7 @@ uint16_t data_istream::readUnsignedShort() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-int32_t data_istream::readInt() {
+int32_t data_istream::read_int() {
     int32_t out = 0;
     read((char*) &out, 4);
 
@@ -61,7 +61,7 @@ int32_t data_istream::readInt() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-uint32_t data_istream::readUnsignedInt() {
+uint32_t data_istream::read_uint() {
     uint32_t out = 0;
     read((char*) &out, 4);
 
@@ -70,7 +70,7 @@ uint32_t data_istream::readUnsignedInt() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-int64_t data_istream::readLong() {
+int64_t data_istream::read_long() {
     int64_t out = 0;
     read((char*) &out, 8);
 
@@ -79,7 +79,7 @@ int64_t data_istream::readLong() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-uint64_t data_istream::readUnsignedLong() {
+uint64_t data_istream::read_ulong() {
     int64_t out = 0;
     read((char*) &out, 8);
 
@@ -88,7 +88,7 @@ uint64_t data_istream::readUnsignedLong() {
     return streams::endianconv::convert(out, m_endianness, streams::endianconv::native);
 }
 
-float data_istream::readFloat() {
+float data_istream::read_float() {
     uint32_t out = 0;
     read((char*) &out, 4);
 
@@ -99,7 +99,7 @@ float data_istream::readFloat() {
     return *tmp;
 }
 
-double data_istream::readDouble() {
+double data_istream::read_double() {
     uint64_t out = 0;
     read((char*) &out, 8);
 
@@ -110,8 +110,8 @@ double data_istream::readDouble() {
     return *tmp;
 }
 
-std::string data_istream::readUTF() {
-    uint16_t length = readUnsignedShort();
+std::string data_istream::read_string() {
+    uint16_t length = read_ushort();
 
     char *buff = new char[length];
 

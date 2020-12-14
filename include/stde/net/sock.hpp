@@ -44,49 +44,49 @@ namespace stde::net {
          * Enable/disable the SO_KEEPALIVE socket option
          * @param value Value for SO_KEEPALIVE
          */
-        void setKeepAlive(bool value);
+        void keep_alive(bool value);
 
         /**
          * Get value of the SO_KEEPALIVE socket option
          * @return  The value of SO_KEEPALIVE
          */
-        bool getKeepAlive();
+        bool keep_alive();
 
         /**
          * Enable/disable the SO_REUSEADDR socket option
          * @param value Value for SO_REUSEADDR
          */
-        void setReuseAddress(bool value);
+        void reuse_address(bool value);
 
         /**
          * Get value of the SO_REUSEADDR socket option
          * @return  The value of SO_REUSEADDR
          */
-        bool getReuseAddress();
+        bool reuse_address();
 
         /**
          * Enable/disable the TCP_NODELAY socket option
          * @param value Value for TCP_NODELAY
          */
-        void setTcpNoDelay(bool value);
+        void tcp_no_delay(bool value);
 
         /**
          * Get value of the TCP_NODELAY socket option
          * @return  The value of TCP_NODELAY
          */
-        bool getTcpNoDelay();
+        bool tcp_no_delay();
 
         /**
          * Get address of the peer we're connected to.
          * @return  Address of the peer
          */
-        sock_address getPeerAddress();
+        sock_address peer_address();
 
         /**
          * Get address of the socket
          * @return  Address of the socket
          */
-        sock_address getSockAddress();
+        sock_address address();
 
         virtual ~sock();
     private:

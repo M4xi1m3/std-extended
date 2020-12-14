@@ -48,19 +48,19 @@ namespace stde::net {
          * Enable/disable the SO_REUSEADDR socket option
          * @param value Value for SO_REUSEADDR
          */
-        void setReuseAddress(bool value);
+        void reuse_address(bool value);
 
         /**
          * Get value of the SO_REUSEADDR socket option
          * @return  The value of SO_REUSEADDR
          */
-        bool getReuseAddress();
+        bool reuse_address();
 
         /**
          * Get address of the socket
          * @return  Address of the socket
          */
-        sock_address getAddress();
+        sock_address address();
 
     private:
         int m_sockfd;
