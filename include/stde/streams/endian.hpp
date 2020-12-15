@@ -1,53 +1,54 @@
 #ifndef STREAMS_ENDIAN_HPP_
 #define STREAMS_ENDIAN_HPP_
 
-namespace stde::streams {
-
-    /**
-     * Does conversions between different endianness
-     */
-    class endianconv {
-    public:
-        /**
-         * Possible endianness
-         */
-        enum endian {
-            little = 0, big = 1
-        };
+namespace stde {
+    namespace streams {
 
         /**
-         * Native endianness, set at runtime
+         * Does conversions between different endianness
          */
-        static endian native;
+        class endianconv {
+        public:
+            /**
+             * Possible endianness
+             */
+            enum endian {
+                little = 0, big = 1
+            };
 
-        /**
-         * Converts between endianness for arbitrary type
-         *
-         * @tparam T    Type to convert
-         * @param value Value to convert
-         * @param from  Input endianness
-         * @param to    Output endianness
-         * @return      Converted value
-         */
-        template<typename T>
-        static T convert(T const& value, endian from, endian to) {
-            if (from == to) {
-                return value;
-            } else {
-                T ret;
+            /**
+             * Native endianness, set at runtime
+             */
+            static endian native;
 
-                const char *arr = (const char*) &value;
-                char *out = (char*) &ret;
+            /**
+             * Converts between endianness for arbitrary type
+             *
+             * @tparam T    Type to convert
+             * @param value Value to convert
+             * @param from  Input endianness
+             * @param to    Output endianness
+             * @return      Converted value
+             */
+            template<typename T>
+            static T convert(T const& value, endian from, endian to) {
+                if (from == to) {
+                    return value;
+                } else {
+                    T ret;
 
-                for (long unsigned int i = 0; i < sizeof(T); i++) {
-                    out[sizeof(T) - 1 - i] = arr[i];
+                    const char *arr = (const char*) &value;
+                    char *out = (char*) &ret;
+
+                    for (long unsigned int i = 0; i < sizeof(T); i++) {
+                        out[sizeof(T) - 1 - i] = arr[i];
+                    }
+
+                    return ret;
                 }
-
-                return ret;
             }
-        }
-    };
+        };
+    }
+}
 
-} /* namespace streams */
-
-#endif /* STREAMS_ENDIAN_HPP_ */
+#endif

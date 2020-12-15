@@ -2,71 +2,83 @@
 #define NET_SERVERSOCK_HPP_
 
 #include <string>
+
+#ifdef WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#define SERVERSOCK_SOCKET_T SOCKET
+#define SERVERSOCK_INVALID SOCKET_ERROR
+#else
 #include <netdb.h>
+#define SERVERSOCK_SOCKET_T int
+#define SERVERSOCK_INVALID -1
+#endif
 
 #include "sock.hpp"
 #include "sockaddress.hpp"
 
-namespace stde::net {
-
-    /**
-     * Represents a TCP server socket
-     */
-    class server_sock {
-    public:
-        /**
-         * Create a socket from address and port, forcing it into SOCK_STREAM, using either IPv4 or IPv6.
-         * After this, the socket is not bound and isn't listening
-         *
-         * @param address
-         */
-        server_sock(const sock_address& address);
-        virtual ~server_sock();
+namespace stde {
+    namespace net {
 
         /**
-         * Bind the server socket
+         * Represents a TCP server socket
          */
-        void bind();
+        class server_sock {
+        public:
+            /**
+             * Create a socket from address and port, forcing it into SOCK_STREAM, using either IPv4 or IPv6.
+             * After this, the socket is not bound and isn't listening
+             *
+             * @param address
+             */
+            server_sock(const sock_address& address);
+            virtual ~server_sock();
 
-        /**
-         * Start listening
-         */
-        void listen();
+            /**
+             * Bind the server socket
+             */
+            void bind();
 
-        /**
-         * Accept a client
-         * @return  The client socket
-         */
-        sock accept();
+            /**
+             * Start listening
+             */
+            void listen();
 
-        /**
-         * Closes the socket
-         */
-        void close();
+            /**
+             * Accept a client
+             * @return  The client socket
+             */
+            sock accept();
 
-        /**
-         * Enable/disable the SO_REUSEADDR socket option
-         * @param value Value for SO_REUSEADDR
-         */
-        void reuse_address(bool value);
+            /**
+             * Closes the socket
+             */
+            void close();
 
-        /**
-         * Get value of the SO_REUSEADDR socket option
-         * @return  The value of SO_REUSEADDR
-         */
-        bool reuse_address();
+            /**
+             * Enable/disable the SO_REUSEADDR socket option
+             * @param value Value for SO_REUSEADDR
+             */
+            void reuse_address(bool value);
 
-        /**
-         * Get address of the socket
-         * @return  Address of the socket
-         */
-        sock_address address();
+            /**
+             * Get value of the SO_REUSEADDR socket option
+             * @return  The value of SO_REUSEADDR
+             */
+            bool reuse_address();
 
-    private:
-        int m_sockfd;
-        struct addrinfo *m_addrinfo;
-    };
+            /**
+             * Get address of the socket
+             * @return  Address of the socket
+             */
+            sock_address address();
 
-} /* namespace net */
+        private:
+            SERVERSOCK_SOCKET_T m_sockfd;
+            struct addrinfo *m_addrinfo;
+        };
+    }
+}
 
-#endif /* NET_SERVERSOCK_HPP_ */
+#endif

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(stde)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Grab all sources
 file(GLOB SOURCES "src/*.cpp" "src/*/*.cpp")
 
@@ -29,11 +32,16 @@ target_include_directories(STDE_OBJECTS PUBLIC
     $<INSTALL_INTERFACE:include/stde>
     PRIVATE src)
 
-
 # Add zlib
 find_package(ZLIB)
+target_include_directories(STDE_OBJECTS PRIVATE ${ZLIB_INCLUDE_DIRS})
 target_link_libraries(stde ZLIB::ZLIB)
 target_link_libraries(stde_static ZLIB::ZLIB)
+
+if(WIN32)
+  target_link_libraries(stde wsock32 ws2_32)
+  target_link_libraries(stde_static wsock32 ws2_32)
+endif()
 
 # Add install for shared lib
 install(TARGETS ${PROJECT_NAME} EXPORT stdeConfig

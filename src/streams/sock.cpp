@@ -1,8 +1,14 @@
 #include "streams/sock.hpp"
 
+#ifdef WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#endif
 
 using namespace stde::streams;
 
