@@ -18,24 +18,24 @@ using namespace stde;
 
 int main() {
     net::init();
-/*
-    net::server_sock s(net::sock_address("0.0.0.0:12345"));
-    s.reuse_address(true);
-    s.bind();
-    s.listen();
+    /*
+     net::server_sock s(net::sock_address("0.0.0.0:12345"));
+     s.reuse_address(true);
+     s.bind();
+     s.listen();
 
-    std::cout << "Server listening on " << s.address() << std::endl;
+     std::cout << "Server listening on " << s.address() << std::endl;
 
-    net::sock client = s.accept();
-    net::sock_address client_addr = client.peer_address();
+     net::sock client = s.accept();
+     net::sock_address client_addr = client.peer_address();
 
-    streams::sock_ostream client_out(client);
+     streams::sock_ostream client_out(client);
 
-    client_out << "Hello " << client_addr << "\n";
+     client_out << "Hello " << client_addr << "\n";
 
-    client_out.flush();
-    client.close();
-*/
+     client_out.flush();
+     client.close();
+     */
 
     net::sock s(net::sock_address("127.0.0.1:12345"));
     s.connect();

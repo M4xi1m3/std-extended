@@ -44,7 +44,7 @@ namespace stde {
         private:
             std::streambuf *m_buffer;
 
-            impl* m_imp;
+            impl *m_imp;
         };
 
         /**

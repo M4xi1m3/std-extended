@@ -155,13 +155,14 @@ sock_address sock::peer_address() {
 
     char address[INET6_ADDRSTRLEN];
     len = sizeof(addr);
-    if (getpeername(m_sockfd, (struct sockaddr*)&addr, &len) == SOCK_INVALID) {
+    if (getpeername(m_sockfd, (struct sockaddr*) &addr, &len) == SOCK_INVALID) {
         throw std::system_error(ERROR_CODE, std::system_category(), "getpeername");
     }
 
     getnameinfo((struct sockaddr*) &addr, sizeof(struct sockaddr), address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
+    return sock_address(std::string(address), ntohs(addr.sin6_port),
+            addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
 }
 
 sock_address sock::address() {
@@ -175,7 +176,8 @@ sock_address sock::address() {
 
     getnameinfo((struct sockaddr*) &addr, sizeof(struct sockaddr), address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
+    return sock_address(std::string(address), ntohs(addr.sin6_port),
+            addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
 }
 
 sock::~sock() {

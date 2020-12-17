@@ -177,7 +177,7 @@ void properties::load(std::istream& input) {
 }
 
 void properties::save(std::ostream& output) {
-    for(std::pair<std::string, std::string> const& x : *this) {
+    for (std::pair<std::string, std::string> const &x : *this) {
         output << save_convert(x.first, true) << "=" << save_convert(x.second, false) << "\n";
     }
 }

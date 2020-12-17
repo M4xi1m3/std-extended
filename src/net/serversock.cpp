@@ -156,9 +156,10 @@ sock_address server_sock::address() {
     len = sizeof(addr);
     getsockname(m_sockfd, (struct sockaddr*) &addr, &len);
 
-    getnameinfo((sockaddr*)&addr, len, address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
+    getnameinfo((sockaddr*) &addr, len, address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
 
-    return sock_address(std::string(address), ntohs(addr.sin6_port), addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
+    return sock_address(std::string(address), ntohs(addr.sin6_port),
+            addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
 }
 
 server_sock::~server_sock() {

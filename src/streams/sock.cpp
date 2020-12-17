@@ -43,7 +43,7 @@ std::streambuf::int_type sock_streambuf::overflow(std::streambuf::int_type value
 
     if (write_len) {
         int tmp = write_len;
-        while(tmp > 0) {
+        while (tmp > 0) {
             int ret = send(m_socket.m_sockfd, m_outBuffer, write_len, 0);
 
             if (ret == -1) {
