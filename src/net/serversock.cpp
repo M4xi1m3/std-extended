@@ -17,8 +17,6 @@
 #include <cstring>
 #include <system_error>
 
-#include <iostream>
-
 using namespace stde::net;
 
 server_sock::server_sock(const sock_address& address) {
@@ -52,6 +50,12 @@ server_sock::server_sock(const sock_address& address) {
         m_addrinfo = nullptr;
         throw std::system_error(ERROR_CODE, std::system_category(), "socket");
     }
+}
+
+server_sock::server_sock(server_sock&& other) : m_sockfd(other.m_sockfd), m_addrinfo(other.m_addrinfo) {
+    // Dirty hack to avoid closing of the socket by a destructor call.
+    other.m_sockfd = SOCK_INVALID;
+    other.m_addrinfo = nullptr;
 }
 
 static void __listen(SERVERSOCK_SOCKET_T sockfd) {

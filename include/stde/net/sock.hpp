@@ -43,6 +43,16 @@ namespace stde {
             sock(const sock_address& address);
 
             /**
+             * Move constructor
+             *
+             * @param other Socket to move
+             */
+            sock(sock&& other);
+
+            sock(sock& other) = delete;
+            sock& operator=(const sock&) = delete;
+
+            /**
              * Close the socket
              */
             void close();

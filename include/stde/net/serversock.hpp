@@ -33,8 +33,16 @@ namespace stde {
              * @param address
              */
             server_sock(const sock_address& address);
-            virtual ~server_sock();
 
+            /**
+             * Move constructor
+             *
+             * @param other Socket to move
+             */
+            server_sock(server_sock&& other);
+
+            server_sock(server_sock& other) = delete;
+            server_sock& operator=(const server_sock&) = delete;
             /**
              * Bind the server socket
              */
@@ -74,6 +82,7 @@ namespace stde {
              */
             sock_address address();
 
+            virtual ~server_sock();
         private:
             SERVERSOCK_SOCKET_T m_sockfd;
             struct addrinfo *m_addrinfo;

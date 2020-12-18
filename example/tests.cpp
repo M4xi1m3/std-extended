@@ -35,6 +35,7 @@ int main() {
 
      client_out.flush();
      client.close();
+     s.close();
      */
 
     net::sock s(net::sock_address("127.0.0.1:12345"));

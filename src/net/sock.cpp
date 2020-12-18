@@ -19,6 +19,31 @@
 #define ERROR_CODE errno
 #endif
 
+#ifdef __MINGW32__
+// This is needed because mingw doesn't include it.
+static const char* inet_ntop(int af, const void* src, char* dst, socklen_t size) {
+    struct sockaddr_storage ss;
+    unsigned long s = size;
+
+    ZeroMemory(&ss, sizeof(ss));
+    ss.ss_family = af;
+
+    switch (af) {
+    case AF_INET:
+        ((struct sockaddr_in*)&ss)->sin_addr = *(struct in_addr*)src;
+        break;
+    case AF_INET6:
+        ((struct sockaddr_in6*)&ss)->sin6_addr = *(struct in6_addr*)src;
+        break;
+    default:
+        return NULL;
+    }
+    /* cannot direclty use &size because of strict aliasing rules */
+    return (WSAAddressToString((struct sockaddr*)&ss, sizeof(ss), NULL, dst, &s) == 0) ? dst : NULL;
+}
+
+#endif
+
 using namespace stde::net;
 
 sock::sock(const sock_address& address) {
@@ -46,6 +71,12 @@ sock::sock(const sock_address& address) {
         m_addrinfo = nullptr;
         throw std::system_error(ERROR_CODE, std::system_category(), "socket");
     }
+}
+
+sock::sock(sock&& other) : m_sockfd(other.m_sockfd), m_addrinfo(other.m_addrinfo) {
+    // Dirty hack to avoid closing of the socket by a destructor call.
+    other.m_sockfd = SOCK_INVALID;
+    other.m_addrinfo = nullptr;
 }
 
 static void __connect(int sockfd, struct addrinfo** addrinfo) {
@@ -148,6 +179,14 @@ bool sock::tcp_no_delay() {
     return out == 0 ? false : true;
 }
 
+static void* get_in_addr(struct sockaddr* sa) {
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*) sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*) sa)->sin6_addr);
+}
+
 sock_address sock::peer_address() {
     struct sockaddr_in6 addr;
 
@@ -159,7 +198,7 @@ sock_address sock::peer_address() {
         throw std::system_error(ERROR_CODE, std::system_category(), "getpeername");
     }
 
-    getnameinfo((struct sockaddr*) &addr, sizeof(struct sockaddr), address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
+    inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
 
     return sock_address(std::string(address), ntohs(addr.sin6_port),
             addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
@@ -174,7 +213,7 @@ sock_address sock::address() {
     len = sizeof(addr);
     getsockname(m_sockfd, (struct sockaddr*) &addr, &len);
 
-    getnameinfo((struct sockaddr*) &addr, sizeof(struct sockaddr), address, sizeof address, nullptr, 0, NI_NUMERICHOST | NI_NUMERICSERV);
+    inet_ntop(addr.sin6_family, get_in_addr((struct sockaddr*) &addr), address, sizeof address);
 
     return sock_address(std::string(address), ntohs(addr.sin6_port),
             addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);

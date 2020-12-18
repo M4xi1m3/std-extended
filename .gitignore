@@ -4,3 +4,5 @@
 .cproject
 .project
 .metadata
+.vs
+out

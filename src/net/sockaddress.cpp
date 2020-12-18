@@ -148,9 +148,7 @@ sock_address::sock_address(const std::string& address, const std::string& servic
 }
 
 sock_address::sock_address(const std::string& address, uint16_t port, ip_family family) : m_address(address), m_port(port), m_family(family) {
-
     int out = inet_pton(family == ip_family::inet6 ? AF_INET6 : AF_INET, address.c_str(), &m_sockaddr);
-    // int out = 1;
 
     if (out == 0) {
         throw std::invalid_argument("address doesn't represent a valid address in the specified family");
