@@ -34,27 +34,33 @@ target_include_directories(STDE_OBJECTS PUBLIC
 
 # Add zlib
 find_package(ZLIB)
-target_include_directories(STDE_OBJECTS PRIVATE ${ZLIB_INCLUDE_DIRS})
-target_link_libraries(stde ZLIB::ZLIB)
-target_link_libraries(stde_static ZLIB::ZLIB)
 
-if(WIN32)
-  target_link_libraries(stde wsock32 ws2_32)
-  target_link_libraries(stde_static wsock32 ws2_32)
+if(ZLIB_FOUND)
+    target_include_directories(STDE_OBJECTS PRIVATE ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(stde ZLIB::ZLIB)
+    target_link_libraries(stde_static ZLIB::ZLIB)
+else()
+    message(WARNING "System doesn't provde ZLib, downloading...")
+    configure_file(CMakeLists.txt.in zlib-download/CMakeLists.txt)
+
+    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/zlib-download"
+    )
+    execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/zlib-download"
+    )
+
+    add_subdirectory(${CMAKE_SOURCE_DIR}/external/zlib)
+
+    target_include_directories(STDE_OBJECTS PRIVATE ${CMAKE_SOURCE_DIR}/external/zlib ${CMAKE_BINARY_DIR}/external/zlib)
+    target_link_libraries(stde zlib)
+    target_link_libraries(stde_static zlib)
 endif()
 
-# Add install for shared lib
-install(TARGETS ${PROJECT_NAME} EXPORT stdeConfig
-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-# Add install for includes
-install(DIRECTORY include/stde/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-
-# Add install for config
-install(EXPORT stdeConfig DESTINATION share/stde/cmake)
-export(TARGETS ${PROJECT_NAME} FILE stdeConfig.cmake)
+if(WIN32)
+    target_link_libraries(stde wsock32 ws2_32)
+    target_link_libraries(stde_static wsock32 ws2_32)
+endif()
 
 # Add tests executable
 add_executable(stdetests example/tests.cpp)

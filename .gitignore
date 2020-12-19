@@ -1,5 +1,6 @@
 /Debug/
 /build/
+/external/
 .settings
 .cproject
 .project

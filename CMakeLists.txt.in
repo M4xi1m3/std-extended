@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+project(zlib-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(zlib-download
+                    SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/zlib
+                    URL http://zlib.net/zlib1211.zip
+                    CONFIGURE_COMMAND ""
+                    BUILD_COMMAND ""
+                    INSTALL_COMMAND ""
+                    TEST_COMMAND "")
+
