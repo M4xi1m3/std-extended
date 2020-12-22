@@ -1,6 +1,7 @@
 /Debug/
 /build/
 /external/
+/log/
 .settings
 .cproject
 .project

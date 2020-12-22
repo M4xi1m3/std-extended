@@ -2,43 +2,37 @@
 #include <fstream>
 
 #include "stde/stde.hpp"
+#include "stde/log/log.hpp"
 
 using namespace stde;
 
 int main() {
     net::init();
+    log::log l = log::log::get("main");
 
-    stde::streams::tee_ostream tee(std::cout, std::cerr);
-    tee << "Hello!" << std::endl;
-    /*
-     net::server_sock s(net::sock_address("[::]:12345"));
-     s.reuse_address(true);
-     s.bind();
-     s.listen();
+    net::server_sock s(net::sock_address("[::]:12345"));
+    s.reuse_address(true);
+    s.bind();
+    s.listen();
 
-     std::cout << "Server listening on " << s.address() << std::endl;
+    l << log::level::info << "Server listening on " << s.address() << "." << std::endl;
 
-     net::sock client = s.accept();
-     net::sock_address client_addr = client.peer_address();
+    net::sock client = s.accept();
+    net::sock_address client_addr = client.peer_address();
 
-     streams::sock_ostream client_out(client);
+    l << log::level::info << "Accepted connection from  " << client_addr << "." << std::endl;
 
-     client_out << "Hello " << client_addr << "\n";
+    streams::sock_ostream client_out(client);
 
-     client_out.flush();
-     client.close();
-     s.close();
-     */
-    /*
-     net::sock s(net::sock_address("127.0.0.1:12345"));
-     s.connect();
-     std::cout << "Socket on " << s.address() << " connected to " << s.peer_address() << std::endl;
+    client_out << "Hello " << client_addr << "\n";
 
-     streams::sock_ostream sout(s);
-     sout << "Hello from " << s.address() << std::endl;
-     sout.flush();
-     s.close();
-     */
+    client_out.flush();
+    client.close();
+    s.close();
+
+    l << log::level::info << "Closed connection from  " << client_addr << "." << std::endl;
+
+    log::log::clean();
     net::deinit();
     return 0;
 }
