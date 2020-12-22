@@ -6,5 +6,6 @@
 #include "exceptions.hpp"
 #include "gzip.hpp"
 #include "sock.hpp"
+#include "tee.hpp"
 
 #endif
