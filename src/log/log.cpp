@@ -33,9 +33,9 @@ std::string log::logfile() {
 std::ofstream log::m_logfile;
 stde::streams::tee_ostream log::m_outstream(std::cout, log::m_logfile);
 bool log::m_init = false;
-std::map<std::string, log*> log::m_loggers;
+std::map<std::string, stde::log::log*> log::m_loggers;
 
-log& log::get(const std::string& name) {
+stde::log::log& log::get(const std::string& name) {
     if (!m_init) {
         m_init = true;
         log::m_logfile = std::ofstream(logfile());

@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <fcntl.h>
 #define ERROR_CODE errno
 #endif
 
@@ -21,6 +22,10 @@ using namespace stde::net;
 
 server_sock::server_sock(const sock_address& address) {
     m_sockfd = SERVERSOCK_INVALID;
+#ifdef WIN32
+    m_blocking = false;
+#endif
+
 
     struct addrinfo hints;
     m_addrinfo = nullptr;
@@ -56,6 +61,9 @@ server_sock::server_sock(server_sock&& other) : m_sockfd(other.m_sockfd), m_addr
     // Dirty hack to avoid closing of the socket by a destructor call.
     other.m_sockfd = SOCK_INVALID;
     other.m_addrinfo = nullptr;
+#ifdef WIN32
+    m_blocking = other.m_blocking;
+#endif
 }
 
 static void __listen(SERVERSOCK_SOCKET_T sockfd) {
@@ -164,6 +172,30 @@ sock_address server_sock::address() {
 
     return sock_address(std::string(address), ntohs(addr.sin6_port),
             addr.sin6_family == AF_INET6 ? sock_address::ip_family::inet6 : sock_address::ip_family::inet4);
+}
+
+void server_sock::blocking(bool value) {
+#ifdef WIN32
+    /// @note windows sockets are created in blocking mode by default
+    // currently on windows, there is no easy way to obtain the socket's current blocking mode since WSAIsBlocking was deprecated
+    u_long flags = value ? 0 : 1;
+    ioctlsocket(m_sockfd, FIONBIO, &flags);
+    m_blocking = value;
+#else
+    const int flags = fcntl(m_sockfd, F_GETFL, 0);
+    fcntl(m_sockfd, F_SETFL, value ? flags ^ O_NONBLOCK : flags | O_NONBLOCK);
+#endif
+
+}
+
+bool server_sock::blocking() {
+#ifdef WIN32
+    return m_blocking;
+#else
+
+    const int flags = fcntl(m_sockfd, F_GETFL, 0);
+    return !(flags & O_NONBLOCK);
+#endif
 }
 
 server_sock::~server_sock() {

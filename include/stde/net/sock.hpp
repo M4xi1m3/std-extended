@@ -58,6 +58,11 @@ namespace stde {
             void close();
 
             /**
+             * Shuts the socket down
+             */
+            void shutdown();
+
+            /**
              * Connects the socket.
              */
             void connect();

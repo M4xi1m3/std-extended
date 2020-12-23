@@ -77,6 +77,18 @@ namespace stde {
             bool reuse_address();
 
             /**
+             * Set socket to be blocking or not
+             * @param value If the socket is blocking or not
+             */
+            void blocking(bool value);
+
+            /**
+             * Check if socket is blocking or not
+             * @return  If the socket is blocking or not
+             */
+            bool blocking();
+
+            /**
              * Get address of the socket
              * @return  Address of the socket
              */
@@ -86,6 +98,9 @@ namespace stde {
         private:
             SERVERSOCK_SOCKET_T m_sockfd;
             struct addrinfo *m_addrinfo;
+#ifdef WIN32
+            bool m_blocking = false;
+#endif
         };
     }
 }

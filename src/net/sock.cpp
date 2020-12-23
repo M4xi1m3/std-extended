@@ -119,6 +119,20 @@ void sock::close() {
     }
 }
 
+static void __shutdown(SOCK_SOCKET_T fd) {
+#ifdef WIN32
+    shutdown(fd, SD_BOTH);
+#else
+    shutdown(fd, SHUT_RDWR);
+#endif
+}
+
+void sock::shutdown() {
+    if (m_sockfd != SOCK_INVALID) {
+        __shutdown(m_sockfd);
+    }
+}
+
 sock::sock(SOCK_SOCKET_T sockfd) : m_sockfd(sockfd), m_addrinfo(nullptr) {
 
 }
