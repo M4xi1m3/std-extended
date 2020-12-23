@@ -16,7 +16,7 @@ namespace stde {
          *  - Lines can only end in \n
          *  - Since it's in UTF-8, the \u escape sequence doesn't exist.
          */
-        class properties: std::map<std::string, std::string> {
+        class properties: public std::map<std::string, std::string> {
         public:
             properties();
             virtual ~properties();
