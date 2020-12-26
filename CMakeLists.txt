@@ -44,15 +44,15 @@ else()
     configure_file(CMakeLists.txt.in zlib-download/CMakeLists.txt)
 
     execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/zlib-download"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/zlib-download"
     )
     execute_process(COMMAND "${CMAKE_COMMAND}" --build .
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/zlib-download"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/zlib-download"
     )
 
-    add_subdirectory(${CMAKE_SOURCE_DIR}/external/zlib)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/zlib)
 
-    target_include_directories(STDE_OBJECTS PRIVATE ${CMAKE_SOURCE_DIR}/external/zlib ${CMAKE_BINARY_DIR}/external/zlib)
+    target_include_directories(STDE_OBJECTS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
     target_link_libraries(stde zlib)
     target_link_libraries(stde_static zlib)
 endif()
