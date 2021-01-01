@@ -107,6 +107,15 @@ sock server_sock::accept() {
         throw std::system_error(ERROR_CODE, std::system_category(), "accept");
     }
 
+#ifdef WIN32
+    // Assure the socket is blocking
+    // This is needed because windows makes a socket non-blocking if the server socket was non-blocking.
+    // We want to maintain coherent behavior across all OS, so we must enforce that the socket is in a blocking state
+    // as on *nix.
+    u_long flags = 0;
+    ioctlsocket(client_sockfd, FIONBIO, &flags);
+#endif
+
     sock client(client_sockfd);
     return client;
 }
